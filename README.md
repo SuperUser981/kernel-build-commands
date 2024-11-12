@@ -1,6 +1,6 @@
 # open kernel-build-commands.txt
 
-
+```
 Building a Kernel for Beginners 
 
 Summary 
@@ -305,7 +305,7 @@ https://gist.github.com/P1N2O/b9b2604c58aa4d7486e2fc0d327d23dc#how-to-get-binuti
 
 
 
-
+```
 
 
 
