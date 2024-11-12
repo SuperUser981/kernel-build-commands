@@ -300,7 +300,7 @@ Note: if it doesn't build and you can't see the error message, delete the -j** f
 ========================
 Physwizz group: https://t.me/physwizz3
 Physwizz Channel:  https://t.me/physwizz2
-
+https://gist.github.com/P1N2O/b9b2604c58aa4d7486e2fc0d327d23dc#how-to-get-binutils
 
 
 
