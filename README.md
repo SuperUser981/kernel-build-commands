@@ -19,7 +19,9 @@ Summary
 Requirements
 ---------------------
 You need a PC with Linux
-
+A compatible kernel (4.4 or 4.9 LTS work best)
+arm64 or x86_64
+Patience
 
 0. Setup Linux
 ---------------------
@@ -40,12 +42,17 @@ sudo apt install build-essential
 sudo apt-get install flex
 sudo apt install bison
 sudo apt install android-sdk-libsparse-utils
-sudo apt install bc
+sudo apt-get install bc
 sudo apt-get install python3-dev
 sudo apt-get install kernel-package
 sudo apt-get install libssl-dev libncurses5-dev libz-dev libgdbm-dev libcdb-dev libdb-dev libncursesw5-dev libgdbm-dev libdb-dev libncursesw5-dev libssl-dev liblzma-dev libpixelfb-dev libglib2.0-dev libsqlite3-dev libxml2-utils libelf-dev
+sudo apt-get install gcc-aarch64-linux-gnu
+sudo apt-get install g++-aarch64-linux-gnu
+sudo apt-get install cpio
 
-
+sudo add-apt-repository ppa:linaro-maintainers/toolchain
+sudo apt-get update
+sudo apt-get install gcc-**version**-aarch64-linux-gnu
 
 sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip 
 
@@ -140,7 +147,13 @@ Ctrl o
 Ctrl x 
 git push origin main -f
 
-4. Kernel Building
+
+
+
+
+
+
+4. compile the kernel
 ---------------------------
 
 1. open the defconfig file with text editor located at
@@ -190,14 +203,30 @@ source Vpy27/bin/activate
 
 ####################################################################################################################################
 
+4. How to compile the kernel with Clang (standalone)
+NOTE: I am not going to write this for beginnings. I assume if you are smart enough to pick some commits, you are smart enough to know how to run git clone and know the paths of your system.
 
+Add the Clang commits to your kernel source
+https://gist.github.com/P1N2O/b9b2604c58aa4d7486e2fc0d327d23dc#getting-the-clang-patchset
+
+Download/build a compatible Clang toolchain
+https://gist.github.com/P1N2O/b9b2604c58aa4d7486e2fc0d327d23dc#how-to-get-a-clang-toolchain
+
+Download/build a copy of binutils
+https://gist.github.com/P1N2O/b9b2604c58aa4d7486e2fc0d327d23dc#how-to-get-binutils
+
+
+
+Compile the kernel (for arm64, x86_64 is similar - example using AOSP's toolchains):
+
+###############################################################################
 make -C $(pwd) O=$(pwd)/out <defconfig> -j2
 make -C $(pwd) O=$(pwd)/out -j2
-
+###############################################################################
 
 make ginkgo-stock_defconfig O=out ARCH=arm64 PATH="/workspace/Empty/proton-clang/bin:$PATH" 
 make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-
+###############################################################################
 
 make ginkgo-perf_defconfig -C $(pwd) O=out ARCH=arm64
 PATH="/workspace/Empty/toolchains/clang-r428724/bin:/workspace/Empty/toolchains/arm-linux-androideabi-4.9/bin:/workspace/Empty/toolchains/aarch64-linux-android-4.9/bin:${PATH}" \
@@ -208,11 +237,14 @@ make -j$(nproc --all) O=out \
 					  CROSS_COMPILE_ARM32=arm-linux-androideabi- \
                       CROSS_COMPILE=aarch64-linux-android-
 
+###############################################################################
+make ginkgo-perf_defconfig O=out ARCH=arm64 PATH="/workspace/Empty/Sixteen_Clang/bin:$PATH"
+make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- CLANG_TRIPLE=aarch64-linux-gnu
+
 ####################################################################################################################################
 
 
 # kernel-build-commands
-
 
 build.sh
 
@@ -266,12 +298,10 @@ Note: if it doesn't build and you can't see the error message, delete the -j** f
 
 
 ========================
-A12s Channel:  https://t.me/a127f_res
-A12s group:  https://t.me/a12schat
 Physwizz group: https://t.me/physwizz3
 Physwizz Channel:  https://t.me/physwizz2
 
-@physwizz
+
 
 
 
