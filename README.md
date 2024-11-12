@@ -1,4 +1,3 @@
-# open kernel-build-commands.txt
 
 ```
 Building a Kernel for Beginners 
