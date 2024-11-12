@@ -1,4 +1,28 @@
-# kernel-build-commands
+
+Building a Kernel for Beginners 
+
+Summary 
+1. Download source code 
+2. Expand to folder 
+3. Push to github.com 
+4. Modify (add changes and cherry-picks)
+5. Push changes to github.com 
+6. Compile kernel 
+7. Add Image file to boot.img or add to zip installer
+
+
+
+
+
+Requirements
+---------------------
+You need a PC with Linux
+
+
+0. Setup Linux
+---------------------
+
+Open terminal 
 
 ####################################################################################################################################
 sudo apt update
@@ -24,140 +48,6 @@ sudo apt-get install libssl-dev libncurses5-dev libz-dev libgdbm-dev libcdb-dev 
 sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip 
 
 ####################################################################################################################################
-
-
-
-make menuconfig
-
-make mrproper
-
-
-
-####################################################################################################################################
-
-make -C $(pwd) O=$(pwd)/out <defconfig> -j2
-make -C $(pwd) O=$(pwd)/out -j2
-
-
-
-
-make ginkgo-stock_defconfig O=out ARCH=arm64 PATH="/workspace/Empty/proton-clang/bin:$PATH" 
-make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-
-
-
-
-make ginkgo-perf_defconfig -C $(pwd) O=out ARCH=arm64
-PATH="/workspace/Empty/toolchains/clang-r428724/bin:/workspace/Empty/toolchains/arm-linux-androideabi-4.9/bin:/workspace/Empty/toolchains/aarch64-linux-android-4.9/bin:${PATH}" \
-make -j$(nproc --all) O=out \
-                      ARCH=arm64 \
-                      CC=clang \
-                      CLANG_TRIPLE=aarch64-linux-gnu- \
-					  CROSS_COMPILE_ARM32=arm-linux-androideabi- \
-                      CROSS_COMPILE=aarch64-linux-android-
-
-
-
-####################################################################################################################################
-
-build.sh
-
-# ENV
-CONFIG=vendor/sixteen_defconfig
-KERNEL_DIR=$(pwd)
-PARENT_DIR="$(dirname "$KERNEL_DIR")"
-KERN_IMG="$HOME/out-new-R/out/arch/arm64/boot/Image.gz-dtb"
-export KBUILD_BUILD_USER="elang"
-export KBUILD_BUILD_HOST="kyvangkaelang"
-export PATH="$HOME/toolchain/Sixteen_Clang/bin:$PATH"
-export LD_LIBRARY_PATH="$HOME/toolchain/Sixteen_Clang/lib:$LD_LIBRARY_PATH"
-export KBUILD_COMPILER_STRING="$($HOME/toolchain/Sixteen_Clang/bin/clang --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//' -e 's/^.*clang/clang/')"
-export out=$HOME/out-new-R-miui
-
-# Functions
-clang_build () {
-    make -j$(nproc --all) O=$out \
-                          ARCH=arm64 \
-                          CC="clang" \
-                          AR="llvm-ar" \
-                          NM="llvm-nm" \
-			  LD="ld.lld" \
-			  AS="llvm-as" \
-			  OBJCOPY="llvm-objcopy" \
-			  OBJDUMP="llvm-objdump" \
-                          CLANG_TRIPLE=aarch64-linux-gnu- \
-                          CROSS_COMPILE=aarch64-linux-gnu- \
-                          CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-}
-
-
-####################################################################################################################################
-
-
-# open kernel-build-commands.txt
-
-
-Building a Kernel for Beginners 
-
-
-
-
-
-
-
-
-Summary 
-1. Download source code 
-2. Expand to folder 
-3. Push to github.com 
-4. Modify (add changes and cherry-picks)
-5. Push changes to github.com 
-6. Compile kernel 
-7. Add Image file to boot.img or add to zip installer
-
-
-
-
-
-
-
-Requirements
----------------------
-You need a PC with Linux
-I use mint mate on virtual box external SSD from my iMac 
-
-0. Setup Linux
----------------------
-
-Open terminal 
-
-sudo apt update
-sudo apt upgrade
-sudo apt-get install git-all
-sudo apt-get install gcc
-sudo apt-get install aptitude
-sudo apt-get install make
-sudo apt install python-is-python3
-sudo apt install pip
-sudo apt install openssl
-sudo apt install build-essential
-sudo apt-get install flex
-sudo apt install bison
-sudo apt install android-sdk-libsparse-utils
-sudo apt-get install bc
-sudo apt-get install python3-dev
-sudo apt-get install kernel-package
-sudo apt-get install libssl-dev libncurses5-dev libz-dev libgdbm-dev libcdb-dev libdb-dev libncursesw5-dev libgdbm-dev libdb-dev libncursesw5-dev libssl-dev liblzma-dev libpixelfb-dev libglib2.0-dev libsqlite3-dev libxml2-utils libelf-dev
-sudo apt-get install gcc-aarch64-linux-gnu
-sudo apt-get install g++-aarch64-linux-gnu
-sudo apt-get install cpio
-
-sudo add-apt-repository ppa:linaro-maintainers/toolchain
-sudo apt-get update
-sudo apt-get install gcc-**version**-aarch64-linux-gnu
-
-sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip 
-
 
 
 # Increase linux swapfile size (works best on SSD)
@@ -275,19 +165,89 @@ CONFIG_LOCALVERSION="-<user>"
 CONFIG_KERNEL_GZIP=y
 Configures Output of Image.gz
 
+$ make menuconfig
+
+
+
+
 For further changes see my GitHub
 https://github.com/physwizz
 
 cd Kernel
-
+###############################################################################
 ./build_kernel.sh
 
 If you get python errors you might need to use python 2
 
-sudo -s
+$ make mrproper
 
+sudo -s
 virtualenv -p /usr/bin/python2.7 Vpy27
 source Vpy27/bin/activate
+
+
+####################################################################################################################################
+
+
+make -C $(pwd) O=$(pwd)/out <defconfig> -j2
+make -C $(pwd) O=$(pwd)/out -j2
+
+
+make ginkgo-stock_defconfig O=out ARCH=arm64 PATH="/workspace/Empty/proton-clang/bin:$PATH" 
+make -j$(nproc --all) O=out ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+
+
+make ginkgo-perf_defconfig -C $(pwd) O=out ARCH=arm64
+PATH="/workspace/Empty/toolchains/clang-r428724/bin:/workspace/Empty/toolchains/arm-linux-androideabi-4.9/bin:/workspace/Empty/toolchains/aarch64-linux-android-4.9/bin:${PATH}" \
+make -j$(nproc --all) O=out \
+                      ARCH=arm64 \
+                      CC=clang \
+                      CLANG_TRIPLE=aarch64-linux-gnu- \
+					  CROSS_COMPILE_ARM32=arm-linux-androideabi- \
+                      CROSS_COMPILE=aarch64-linux-android-
+
+####################################################################################################################################
+
+
+# kernel-build-commands
+
+
+build.sh
+
+# ENV
+CONFIG=vendor/sixteen_defconfig
+KERNEL_DIR=$(pwd)
+PARENT_DIR="$(dirname "$KERNEL_DIR")"
+KERN_IMG="$HOME/out-new-R/out/arch/arm64/boot/Image.gz-dtb"
+export KBUILD_BUILD_USER="elang"
+export KBUILD_BUILD_HOST="kyvangkaelang"
+export PATH="$HOME/toolchain/Sixteen_Clang/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/toolchain/Sixteen_Clang/lib:$LD_LIBRARY_PATH"
+export KBUILD_COMPILER_STRING="$($HOME/toolchain/Sixteen_Clang/bin/clang --version | head -n 1 | perl -pe 's/\((?:http|git).*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//' -e 's/^.*clang/clang/')"
+export out=$HOME/out-new-R-miui
+
+# Functions
+clang_build () {
+    make -j$(nproc --all) O=$out \
+                          ARCH=arm64 \
+                          CC="clang" \
+                          AR="llvm-ar" \
+                          NM="llvm-nm" \
+			  LD="ld.lld" \
+			  AS="llvm-as" \
+			  OBJCOPY="llvm-objcopy" \
+			  OBJDUMP="llvm-objdump" \
+                          CLANG_TRIPLE=aarch64-linux-gnu- \
+                          CROSS_COMPILE=aarch64-linux-gnu- \
+                          CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+}
+
+
+####################################################################################################################################
+
+
+
+
 
 3. Output is found in /home/<user>/Kernel/arch/arm64/boot
 
@@ -310,6 +270,7 @@ Physwizz group: https://t.me/physwizz3
 Physwizz Channel:  https://t.me/physwizz2
 
 @physwizz
+
 
 
 
